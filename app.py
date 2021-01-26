@@ -205,18 +205,25 @@ def remove_user(id):
         print("Can't remove user with id {}".format(id))
     return redirect(url_for('index'))
 
+@app.route('/secret_route')
+def secret_route():
+    if (g.user.username != 'tuanio'):
+        return redirect(url_for('index'))
+    return render_template('secret_route.html')
+
 @app.before_request
 def load_user_before_request():
 
     user_id = session.get('user_id')
 
-    g.user, g.vocs = None, []
+    g.user, g.vocs, g.all_user = None, [], []
 
     if (user_id is not None):
         g.user = User.query.filter_by(id=user_id).all()
         if (len(g.user) > 0):
             g.user = g.user[0]
         g.vocs = Voc.query.filter_by(author_id=user_id).order_by(Voc.priority).all()
+        g.all_user = User.query.all()
 
     if (g.user == None):
         return
@@ -224,18 +231,19 @@ def load_user_before_request():
     if (g.vocs == []):
         session['time'] = datetime.now()
 
-    delta = datetime.now() - session.get('time')
-    if (delta >= timedelta(days=g.user.days, hours=g.user.hours, minutes=g.user.minutes, seconds=g.user.seconds)):
-        session['time'] = datetime.now()
-        data = Voc.query.filter_by(author_id=user_id).order_by(Voc.priority).all()
-        vocs_len = len(data)
-        data[-1].priority = 1
-        cnt = 2
-        for i in range(vocs_len - 1):
-            data[i].priority = cnt
-            cnt += 1
-        db.session.commit()
-        g.vocs = Voc.query.filter_by(author_id=user_id).order_by(Voc.priority).all()
+    if (g.user != None and g.user != []): 
+        delta = datetime.now() - session.get('time')
+        if (delta >= timedelta(days=g.user.days, hours=g.user.hours, minutes=g.user.minutes, seconds=g.user.seconds)):
+            session['time'] = datetime.now()
+            data = Voc.query.filter_by(author_id=user_id).order_by(Voc.priority).all()
+            vocs_len = len(data)
+            data[-1].priority = 1
+            cnt = 2
+            for i in range(vocs_len - 1):
+                data[i].priority = cnt
+                cnt += 1
+            db.session.commit()
+            g.vocs = Voc.query.filter_by(author_id=user_id).order_by(Voc.priority).all()
 
     column_name = Voc.__table__.columns.keys()[:-1]
     data = [{name: i.to_dict()[name] for name in column_name} for i in g.vocs]
