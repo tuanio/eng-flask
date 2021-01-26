@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if g.user != [] and g.user != None %}
+            <div class="dropdown">
+                <a type="button" class="btn btn-light dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-user"></i>&nbsp; {{ g.user['username'] }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ url_for('setting') }}">
+                        <i class="fas fa-user-cog"></i>
+                    </a>
+                </div>
+            </div>
+            &nbsp;
+            <abbr title="Add Vocabulary" style="text-decoration: none;">
+                <a href="{{ url_for('vocabulary') }}" class="btn btn-outline-primary my2 my-sm-0" alt="Add Vocabulary">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </abbr>
+            &nbsp;
+            <abbr title="Download words as csv" style="text-decoration: none;" >
+                <a href="{{ url_for('static', filename='files/words.xlsx') }}" class="btn btn-outline-dark my2 my-sm-0" target="_blank" alt="Download words">
+                    <i class="fas fa-file-export"></i>
+                </a>
+            </abbr>
+            &nbsp;
+            <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('logout') }}">Logout</a>&nbsp;
+        {% else: %}
+        <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('login') }}">Login</a>&nbsp;
+        <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block body %}
+    {% if g.user == [] or g.user == None: %}
+        <div class="alert alert-warning" role="alert" style="text-align: center;">
+            <b>Register and Login to start learning English!</b>
+        </div>
+    {% elif g.vocs == []: %}
+        <div class="alert alert-primary" role="alert" style="text-align: center;">
+            You have no word, you can add more word by clicking the "Add Vocabulary" button!
+        </div>
+    {% else: %}
+        <div class="index-container">
+            {% for card in g.vocs %}
+                <div class="card big-card">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="#" class="btn sound" data-voice-index="{{ g.user['voice'] }}" data-english="{{ card['english'] }}" onclick="play(event, this);">
+                                <img src="{{ url_for('static', filename='assets/speaker.png') }}" class="loa" alt="loa">
+                            </a>
+                        </div>
+                        <div class="col-md-8 col-voc">
+                            <div class="row">
+                                <div class="col-6 col-english">
+                                    <p class="english"><b>{{ card['english'] }}</b></p>
+                                    <p>{{ card['pronounciation'] }}</p>
+                                </div>
+                                <div class="col-6 col-vietnamese">
+                                    <p class="vietnamese">{{ card['vietnamese'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="{{ url_for('update', voc_id=card['id']) }}" class="btn btn-info btn-edit-index">
+                                <i class="far fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <textarea name="note" class="note" placeholder="No note" class="" disabled>{{ card['note'] }}</textarea>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

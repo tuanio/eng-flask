@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if g.user != [] and g.user != None %}
+            <div class="dropdown">
+                <a type="button" class="btn btn-light dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-user"></i>&nbsp; {{ g.user['username'] }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ url_for('setting') }}">
+                        <i class="fas fa-user-cog"></i>
+                    </a>
+                </div>
+            </div>
+            &nbsp;
+            <abbr title="Add Vocabulary" style="text-decoration: none;">
+                <a href="{{ url_for('vocabulary') }}" class="btn btn-outline-primary my2 my-sm-0" alt="Add Vocabulary">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </abbr>
+            &nbsp;
+            <abbr title="Download words as csv" style="text-decoration: none;" >
+                <a href="{{ url_for('static', filename='files/words.xlsx') }}" class="btn btn-outline-dark my2 my-sm-0" target="_blank" alt="Download words">
+                    <i class="fas fa-file-export"></i>
+                </a>
+            </abbr>
+            &nbsp;
+            <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('logout') }}">Logout</a>&nbsp;
+        {% else: %}
+        <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('login') }}">Login</a>&nbsp;
+        <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('register') }}">Register</a>&nbsp;
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block body %}
+    <h1>Updating ...</h1>
+    <br>
+    <div>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-dark btn-sm"><i class="fas fa-backward"></i> Back to home page</a>
+    </div>
+    <br>
+    <div class="container">
+        <form method="post">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="english">English</label>
+                    <input type="text" class="form-control" placeholder="English" id="english" name="english" value="{{ data['english'] }}" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="pronounciation">pronounciation</label>
+                    <input type="text" class="form-control" placeholder="/ˈɪŋɡlɪʃ/" id="pronounciation" name="pronounciation" value="{{ data['pronounciation'] }}">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="vietnamese">Tiếng Việt</label>
+                    <input type="text" class="form-control" placeholder="Tiếng Việt" id="vietnamese" name="vietnamese" value="{{ data['vietnamese'] }}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="note">Ghi chú</label>
+                <textarea name="note" id="note" class="form-control" rows="3">{{ data['note'] }}</textarea>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class="form-group btn-update">
+                    <button type="submit" class="btn-change btn-edit btn btn-success form-control">Make change</button>&nbsp;
+                    <a href="{{ url_for('delete', voc_id=data['id']) }}" class=" btn-delete btn-edit btn btn-danger form-control">Delete</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

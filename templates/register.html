@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block nav %}{% endblock %}
+
+{% block body %}
+    <h1>Registering ...</h1> <br>
+    <div>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-dark btn-sm"><i class="fas fa-backward"></i> Back to home page</a>
+    </div>
+    <br>
+    {% for message in get_flashed_messages(): %}
+        <div class="alert alert-primary" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <form method="post">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+            <label for="username"><b>Username</b></label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            </div>
+            <div class="form-group col-md-6">
+            <label for="password"><b>Password</b></label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-log-reg btn-edit-login">Register</button>
+    </form>
+{% endblock %}
