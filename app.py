@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 import pandas as pd
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://mchewmaeuooqky:00bfaf8d1f0ea4aff0fecde41b9afeea27de977eb61e95953a2fd91f14dbd079@ec2-54-237-135-248.compute-1.amazonaws.com:5432/d5t4g8pri07d1a'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///english.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://mchewmaeuooqky:00bfaf8d1f0ea4aff0fecde41b9afeea27de977eb61e95953a2fd91f14dbd079@ec2-54-237-135-248.compute-1.amazonaws.com:5432/d5t4g8pri07d1a'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///english.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # python -c 'import os; print(os.urandom(16))'
