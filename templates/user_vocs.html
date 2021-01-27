@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block nav %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if g.user != [] %}
+            <div class="dropdown">
+                <a type="button" class="btn btn-light dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-user"></i>&nbsp; {{ g.user['username'] }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ url_for('setting') }}">
+                        <i class="fas fa-user-cog"></i>
+                    </a>
+                </div>
+            </div>
+            &nbsp;
+            <abbr title="Download words as csv" style="text-decoration: none;" >
+                <a href="{{ url_for('static', filename='files/words.xlsx') }}" class="btn btn-outline-dark my2 my-sm-0" target="_blank" alt="Download words">
+                    <i class="fas fa-file-export"></i>
+                </a>
+            </abbr>
+            &nbsp;
+            <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('logout') }}">Logout</a>&nbsp;
+        {% else: %}
+        <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('login') }}">Login</a>&nbsp;
+        <a class="btn btn-outline-success my-2 my-sm-0" type="submit" href="{{ url_for('register') }}">Register</a>&nbsp;
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Admin</h1> <br> 
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Created date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in g.all_user: %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ word['id'] }}</td>
+                    <td>{{ word['username'] }}</td>
+                    <td>{{ word['created_date'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
