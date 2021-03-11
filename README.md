@@ -1,5 +1,5 @@
 # eng-flask
-- This website I make for practical Flask. And learning English, too!
+- This website I make for practicing Flask. And learning English, too!
 
 <div>
   <div style="display: flex">
