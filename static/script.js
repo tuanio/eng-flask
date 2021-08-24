@@ -8,7 +8,7 @@ function play(e, link) {
     let toSpeak = new SpeechSynthesisUtterance(txt);
     let userVoiceIndex = link.dataset.voiceIndex;
     for (i of listVoices) {
-        if (i[1] == userVoiceIndex) {
+        if (i[1] === userVoiceIndex) {
             toSpeak.voice = i[0];
         }
     }
@@ -18,9 +18,7 @@ function play(e, link) {
 function getVoices(voices) {
     let idx = 0;
     for (i of voices) {
-        if (i['lang'].slice(0, 2) == 'en') {
-            listVoices.push([i, idx++]);
-        }
+        listVoices.push([i, idx++]);
     }
 }   
 
@@ -29,16 +27,15 @@ function loading() {
     if (listVoices == 0) getVoices(synth.getVoices());
 
     let userVoiceIndex = document.querySelector('#voice-user-index').textContent;
-
-    let data = '';
-    for (let i = 0; i < listVoices.length; i++) {
-        if (listVoices[i][1] == userVoiceIndex) {
-            data = listVoices[i];
-            listVoices.splice(i, 1);
-            break;
-        }
-    }
-    listVoices.unshift(data);
+    // let data = '';
+    // for (let i = 0; i < listVoices.length; i++) {
+    //     if (listVoices[i][1] == userVoiceIndex) {
+    //         data = listVoices[i];
+    //         listVoices.splice(i, 1);
+    //         break;
+    //     }
+    // }
+    // listVoices.unshift(data)
 
     listVoices.forEach((voice) => {
         let listItem = document.createElement('option');
@@ -57,6 +54,7 @@ function voiceFunc(option) {
     for (i of listVoices) {
         if (i[1] == selectedIndex) {
             speaker.voice = i[0];
+            break;
         }
     }
     synth.speak(speaker);
